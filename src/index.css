@@ -1,3 +1,266 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "../node_modules/ol/ol.css";
+
+html,
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  overflow-y: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#switch-theme-btn {
+  border-radius: 50%;
+  background-color: #66cdaa;
+  color: white;
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  padding: 8px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+  display: none;
+}
+
+#map {
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+}
+
+#stations {
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: scroll;
+}
+
+#favourite-stations {
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: scroll;
+}
+
+.view {
+  height: 90vh;
+  display: flex;
+  padding: 15px;
+}
+
+.card {
+  width: 100%;
+  height: 175px;
+  border-radius: 5px;
+  background-color: #66cdaa;
+  color: white;
+}
+
+.card-header {
+  width: 100%;
+  height: 50%;
+}
+
+.card-header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.card-body {
+  width: 100%;
+  height: 50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 12px;
+}
+
+.card-body img {
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.card-body-mid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.card-body-last {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+}
+
+.card-body-last div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-body-last div img {
+  width: 70px;
+  height: 25px;
+  cursor: default;
+}
+
+.status-circle-open {
+  border-radius: 50%;
+  background-color: yellow;
+  width: 20px;
+  height: 20px;
+}
+
+.status-circle-close {
+  border-radius: 50%;
+  background-color: red;
+  width: 20px;
+  height: 20px;
+}
+
+nav {
+  background-color: #66cdaa;
+  color: white;
+  font-weight: 600;
+  height: 10.1vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-btn {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  transition: ease-in-out 0.2s;
+}
+
+.nav-btn:hover {
+  background-color: #0077ae;
+}
+
+.nav-btn-circle-inner {
+  border-radius: 50%;
+  background-color: #4390dd;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: ease-in-out 0.2s;
+}
+
+.nav-btn-circle-outer {
+  border-radius: 50%;
+  background-color: #bfebff;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: step-end 0.2s;
+}
+
+.nav-btn-circle-inner-active {
+  border-radius: 50%;
+  background-color: #4390dd;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: ease-in-out 0.2s;
+}
+
+.nav-btn-circle-outer-active {
+  border-radius: 50%;
+  background-color: #bfebff;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: step-end 0.2s;
+}
+
+#map-btn {
+  width: 100px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+#map-btn:hover {
+  background-color: transparent;
+}
+
+.active-btn {
+  background-color: #0077ae;
+}
+
+.ripples {
+  --uib-size: 45px;
+  --uib-speed: 2s;
+  --uib-color: #66cdaa;
+
+  position: relative;
+  height: var(--uib-size);
+  width: var(--uib-size);
+
+  display: none;
+}
+
+.ripples-active {
+  display: block;
+}
+
+.ripples::before,
+.ripples::after,
+.ripples__dot::before,
+.ripples__dot::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 75px;
+  width: 75px;
+  border-radius: 50%;
+  background-color: var(--uib-color);
+  animation: pulse var(--uib-speed) linear infinite;
+  transform: scale(0);
+  opacity: 0;
+}
+
+.ripples::after {
+  animation-delay: calc(var(--uib-speed) / -4);
+}
+
+.ripples__dot::before {
+  animation-delay: calc(var(--uib-speed) * -0.5);
+}
+
+.ripples__dot::after {
+  animation-delay: calc(var(--uib-speed) * -0.75);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
