@@ -1,8 +1,6 @@
 # ChargeSpot
 
-<center>
-  <img src="./public/icons/logo.png" alt="ChargeSpot Logo" width="64" height="64" />
-</center>
+<img src="./public/icons/logo.png" alt="ChargeSpot Logo" width="64" height="64" />
 
 ## What is ChargeSpot?
 A fuel station tracker that shows your fuel stations in your enviroment.
