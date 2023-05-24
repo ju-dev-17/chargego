@@ -7,10 +7,8 @@ import OSM from "ol/source/OSM";
 
 import Marker from "../lib/Marker";
 
-function Map() {
+function Map({ isLoading, setIsLoading, switchTheme }) {
   const mapRef = useRef(null);
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const setupMap = (coords) => {
     if (mapRef.current) {
@@ -62,7 +60,16 @@ function Map() {
           <div className="ripples__dot"></div>
         </div>
       ) : (
-        <img id="switch-theme-btn" alt="Switch theme" />
+        <img
+          onClick={switchTheme}
+          src={
+            localStorage.getItem("isDark") === "true"
+              ? "/icons/sun.svg"
+              : "/icons/moon.svg"
+          }
+          alt="Switch theme"
+          id="switch-theme-btn"
+        />
       )}
     </div>
   );

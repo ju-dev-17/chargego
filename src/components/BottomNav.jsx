@@ -2,7 +2,7 @@ import React from "react";
 
 import { useNavigate } from "react-router-dom";
 
-function BottomNav() {
+function BottomNav({ isLoading }) {
   const navigate = useNavigate();
 
   const handleBtnHover = (event) => {
@@ -23,6 +23,13 @@ function BottomNav() {
     }
   };
 
+  const handeBtnClick = (route) => {
+    console.log(isLoading);
+    if (!isLoading) {
+      navigate(route);
+    }
+  };
+
   return (
     <nav>
       <div>
@@ -34,7 +41,7 @@ function BottomNav() {
             alt="List button"
             onMouseEnter={handleBtnHover}
             onMouseLeave={handleBtnHover}
-            onClick={() => navigate("/stations")}
+            onClick={() => handeBtnClick("/stations")}
           />
         </div>
       </div>
@@ -47,7 +54,7 @@ function BottomNav() {
             alt="Favourite button"
             onMouseEnter={handleBtnHover}
             onMouseLeave={handleBtnHover}
-            onClick={() => navigate("/favourite-stations")}
+            onClick={() => handeBtnClick("/favourite-stations")}
           />
         </div>
       </div>
@@ -58,7 +65,7 @@ function BottomNav() {
         alt="Map button"
         onMouseEnter={handleBtnHover}
         onMouseLeave={handleBtnHover}
-        onClick={() => navigate("/")}
+        onClick={() => handeBtnClick("/")}
       />
       <div>
         <div>
@@ -69,7 +76,7 @@ function BottomNav() {
             alt="Card button"
             onMouseEnter={handleBtnHover}
             onMouseLeave={handleBtnHover}
-            onClick={() => navigate("/payment")}
+            onClick={() => handeBtnClick("/payment")}
           />
         </div>
       </div>
@@ -82,7 +89,7 @@ function BottomNav() {
             alt="Settings button"
             onMouseEnter={handleBtnHover}
             onMouseLeave={handleBtnHover}
-            onClick={() => navigate("/settings")}
+            onClick={() => handeBtnClick("/settings")}
           />
         </div>
       </div>
