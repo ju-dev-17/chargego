@@ -1,4 +1,5 @@
 <img src="./public/icons/logo.png" alt="ChargeSpot Logo" width="64" height="64" />
+
 # ChargeSpot
 
 ## What is ChargeSpot?
