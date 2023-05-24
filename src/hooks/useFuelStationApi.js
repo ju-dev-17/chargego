@@ -1,5 +1,3 @@
-import React from "react";
-
 function useFuelStationApi() {
   const getData = async () => {
     const res = await fetch(
@@ -11,7 +9,7 @@ function useFuelStationApi() {
     );
 
     const data = await res.json();
-
+    
     return data;
   };
 

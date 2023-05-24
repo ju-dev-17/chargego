@@ -217,12 +217,6 @@ nav {
   position: relative;
   height: var(--uib-size);
   width: var(--uib-size);
-
-  display: none;
-}
-
-.ripples-active {
-  display: block;
 }
 
 .ripples::before,
