@@ -1,6 +1,6 @@
 # ChargeSpot
 
-![logo]("./public/icons/logo.png")
+![logo](./public/icons/logo.png)
 
 ## What is ChargeSpot?
 A fuel station tracker that shows your fuel stations in your enviroment.
