@@ -2,7 +2,7 @@ import React from "react";
 
 import { useNavigate } from "react-router-dom";
 
-function BottomNav({ isLoading }) {
+function BottomNav({ isLoading, isDark }) {
   const navigate = useNavigate();
 
   const handleBtnHover = (event) => {
@@ -31,7 +31,7 @@ function BottomNav({ isLoading }) {
   };
 
   return (
-    <nav>
+    <nav style={{ backgroundColor: isDark === "true" ? "#000437" : "#66cdaa" }}>
       <div>
         <div>
           <img

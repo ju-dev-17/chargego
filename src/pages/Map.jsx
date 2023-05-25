@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { Map as OlMap, View } from "ol";
 import { fromLonLat } from "ol/proj";
@@ -7,7 +7,7 @@ import OSM from "ol/source/OSM";
 
 import Marker from "../lib/Marker";
 
-function Map({ isLoading, setIsLoading, switchTheme }) {
+function Map({ isLoading, setIsLoading, isDark, switchTheme }) {
   const mapRef = useRef(null);
 
   const setupMap = (coords) => {
@@ -22,7 +22,6 @@ function Map({ isLoading, setIsLoading, switchTheme }) {
       });
 
       map.on("postcompose", (_e) => {
-        const isDark = localStorage.getItem("isDark");
         document.querySelector("canvas").style.filter = `${
           isDark === "true" ? "grayscale(80%) invert(100%)" : ""
         }`;
@@ -31,14 +30,12 @@ function Map({ isLoading, setIsLoading, switchTheme }) {
       const userPosition = new Marker(coords);
       map.addLayer(userPosition.getMarker());
 
-      setIsLoading(false);
-
       return map.setTarget(mapRef.current);
     }
   };
 
   const updateCoordinate = (callback) => {
-    setIsLoading(true);
+    setIsLoading((prevState) => (prevState = true));
     navigator.geolocation.getCurrentPosition((position) => {
       const coords = {
         latitude: position.coords.latitude,
@@ -50,25 +47,39 @@ function Map({ isLoading, setIsLoading, switchTheme }) {
   };
 
   useEffect(() => {
-    return () => updateCoordinate((coords) => setupMap(coords));
+    const canvas = document.querySelector("canvas");
+    if (canvas) {
+      canvas.style.filter = `${
+        isDark === "true" ? "grayscale(80%) invert(100%)" : ""
+      }`;
+    }
+  }, [isDark]);
+
+  useEffect(() => {
+    return () => updateCoordinate((coords) => {
+      setupMap(coords);
+      setIsLoading((prevState) => (prevState = false));
+    });
   }, []);
 
   return (
     <div className="view active-view" id="map" ref={mapRef}>
       {isLoading ? (
-        <div className="ripples">
+        <div
+          className="ripples"
+          style={{ "--uib-color": isDark === "true" ? "#000437" : "#66cdaa" }}
+        >
           <div className="ripples__dot"></div>
         </div>
       ) : (
         <img
-          onClick={switchTheme}
-          src={
-            localStorage.getItem("isDark") === "true"
-              ? "/icons/sun.svg"
-              : "/icons/moon.svg"
-          }
+          onClick={() => {
+            switchTheme();
+          }}
+          src={isDark === "true" ? "/icons/sun.svg" : "/icons/moon.svg"}
           alt="Switch theme"
           id="switch-theme-btn"
+          style={{ backgroundColor: isDark === "true" ? "#000437" : "#66cdaa" }}
         />
       )}
     </div>
