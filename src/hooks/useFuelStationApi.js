@@ -1,12 +1,14 @@
-function useFuelStationApi() {
+function useFuelStationApi({ latitude, longitude }) {
   const getData = async () => {
-    const res = await fetch(
-      `https://creativecommons.tankerkoenig.de/json/list.php?lat=${latitude}&lng=${longitude}&rad=${radius}&sort=price&type=diesel&apikey=e100136b-3fed-c5ba-6754-bbd3c50f7a9c`
-    );
-
-    const data = await res.json();
-
-    return data;
+    if (latitude && longitude) {
+      const res = await fetch(
+        `https://overpass-api.de/api/interpreter?data=[out:json];(node["amenity"="charging_station"](around:5000,${latitude},${longitude});way["amenity"="charging_station"](around:5000,${latitude},${longitude});relation["amenity"="charging_station"](around:5000,${latitude},${longitude}););out;      `
+      );
+  
+      const data = await res.json();
+  
+      return data;
+    }
   };
 
   return getData;

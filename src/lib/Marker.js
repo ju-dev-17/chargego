@@ -6,12 +6,12 @@ import { Style, Icon } from "ol/style";
 import { fromLonLat } from "ol/proj";
 
 export default class Marker {
-  constructor(cords) {
+  constructor(coords) {
     this.layer = new VectorLayer({
       source: new VectorSource({
         features: [
           new Feature({
-            geometry: new Point(fromLonLat([cords.longitude, cords.latitude])),
+            geometry: new Point(fromLonLat([coords.longitude, coords.latitude])),
           }),
         ],
       }),

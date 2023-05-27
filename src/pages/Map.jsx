@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Map as OlMap, View } from "ol";
 import { fromLonLat } from "ol/proj";
@@ -6,8 +6,15 @@ import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 
 import Marker from "../lib/Marker";
+import useFuelStationApi from "../hooks/useFuelStationApi";
 
-function Map({ isLoading, setIsLoading, isDark, switchTheme }) {
+function Map({
+  isLoading,
+  setIsLoading,
+  isDark,
+  switchTheme,
+  setStations
+}) {
   const mapRef = useRef(null);
 
   const setupMap = (coords) => {
@@ -29,6 +36,19 @@ function Map({ isLoading, setIsLoading, isDark, switchTheme }) {
 
       const userPosition = new Marker(coords);
       map.addLayer(userPosition.getMarker());
+
+      const getData = useFuelStationApi(coords);
+
+      getData().then((stations) => {
+        setStations(stations);
+        stations.elements.forEach((station) => {
+          const stationPosition = new Marker({
+            latitude: station.lat,
+            longitude: station.lon,
+          });
+          map.addLayer(stationPosition.getMarker());
+        });
+      });
 
       return map.setTarget(mapRef.current);
     }
@@ -56,10 +76,11 @@ function Map({ isLoading, setIsLoading, isDark, switchTheme }) {
   }, [isDark]);
 
   useEffect(() => {
-    return () => updateCoordinate((coords) => {
-      setupMap(coords);
-      setIsLoading((prevState) => (prevState = false));
-    });
+    return () =>
+      updateCoordinate((coords) => {
+        setupMap(coords);
+        setIsLoading((prevState) => (prevState = false));
+      });
   }, []);
 
   return (

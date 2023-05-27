@@ -12,6 +12,7 @@ import useTheme from "./hooks/useTheme";
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isDark, switchTheme] = useTheme();
+  const [stations, setStations] = useState([]);
   const body = document.querySelector("body");
 
   body.style.backgroundColor = isDark === "true" ? "#001E4E" : "#fff";
@@ -20,7 +21,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/stations" element={<Stations />} />
+        <Route path="/stations" element={<Stations stations={stations} />} />
         <Route path="/favourite-stations" element={<FavouriteStations />} />
         <Route
           index
@@ -31,6 +32,7 @@ function App() {
               setIsLoading={setIsLoading}
               isDark={isDark}
               switchTheme={switchTheme}
+              setStations={setStations}
             />
           }
         />
