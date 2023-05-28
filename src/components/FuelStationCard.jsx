@@ -1,21 +1,37 @@
 import React from "react";
+import useTheme from "../hooks/useTheme";
 
 function FuelStationCard(station) {
-  const handleClick = (event) => {
-    const cardFavBtn = event.target;
-    if (
-      localStorage
-        .getItem("favStations")
-        .includes(cardFavBtn.parentElement.parentElement.id)
-    ) {
-      removeFromFav(event);
+  const [isDark, _switchTheme] = useTheme();
+
+  const removeFromFav = (favStations) => {
+    const index = favStations.indexOf(station.id);
+    if (index > -1) {
+      favStations.splice(index, 1);  
+    }
+    localStorage.setItem("favStations", favStations);
+  };
+
+  const addToFav = (favStations) => {
+    favStations.push(station.id);
+    localStorage.setItem("favStations", favStations);
+  };
+
+  const handleClick = (_event) => {
+    const favStations = localStorage.getItem("favStations") || [];
+    if (favStations.includes(station.id)) {
+      removeFromFav(favStations);
     } else {
-      addToFav(event);
+      addToFav(favStations);
     }
   };
 
   return (
-    <div className="card" id={station.id}>
+    <div
+      style={{ backgroundColor: isDark === "true" ? "#000437" : "#66cdaa" }}
+      className="card"
+      id={station.id}
+    >
       <div className="card-header">
         <img src="/img/card-img-placeholder.svg" alt="Fuel Station" />
       </div>
@@ -30,20 +46,9 @@ function FuelStationCard(station) {
           }
           alt="Favourite Button"
         />
-        <div className="card-body-mid">
-          {/* <span>Price: {station.diesel} €/kw</span>
-          <span>Time: 4.45 min</span> */}
-        </div>
-        <div className="card-body-last">
-          {/* <span>Distance: {distance} km</span> */}
-          <div>
-            <img src="/icons/car.png" alt="Car" />
-            {/* <div
-              class={
-                station.isOpen ? "status-circle-open" : "status-circle-close"
-              }
-            ></div> */}
-          </div>
+        <h1 style={{ fontWeight: "300" }}>{station.station.tags?.operator}</h1>
+        <div>
+          <img src="/icons/car.png" alt="Car" />
         </div>
       </div>
     </div>

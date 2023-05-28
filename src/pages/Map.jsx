@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { Map as OlMap, View } from "ol";
 import { fromLonLat } from "ol/proj";

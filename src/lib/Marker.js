@@ -11,7 +11,9 @@ export default class Marker {
       source: new VectorSource({
         features: [
           new Feature({
-            geometry: new Point(fromLonLat([coords.longitude, coords.latitude])),
+            geometry: new Point(
+              fromLonLat([coords.longitude, coords.latitude])
+            ),
           }),
         ],
       }),

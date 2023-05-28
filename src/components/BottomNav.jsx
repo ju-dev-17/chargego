@@ -24,7 +24,6 @@ function BottomNav({ isLoading, isDark }) {
   };
 
   const handeBtnClick = (route) => {
-    console.log(isLoading);
     if (!isLoading) {
       navigate(route);
     }
