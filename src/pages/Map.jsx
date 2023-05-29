@@ -1,24 +1,45 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-import { Map as OlMap, View } from "ol";
+import { Feature, Map as OlMap, View } from "ol";
+import Overlay from "ol/Overlay.js";
 import { fromLonLat } from "ol/proj";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
+import { Point } from "ol/geom";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import { Style, Icon } from "ol/style";
 
 import Marker from "../lib/Marker";
 import useFuelStationApi from "../hooks/useFuelStationApi";
+import useDistanceCalc from "../hooks/useDistanceCalc";
 
-function Map({
-  isLoading,
-  setIsLoading,
-  isDark,
-  switchTheme,
-  setStations
-}) {
+function Map({ isLoading, setIsLoading, isDark, switchTheme, setStations, setCoords }) {
   const mapRef = useRef(null);
+  const [features, setFeatures] = useState([]);
+  const calcDistance = useDistanceCalc();
 
   const setupMap = (coords) => {
     if (mapRef.current) {
+      const container = document.getElementById("popup");
+      const content = document.getElementById("popup-content");
+      const closer = document.getElementById("popup-closer");
+
+      const overlay = new Overlay({
+        element: container,
+        autoPan: {
+          animation: {
+            duration: 250,
+          },
+        },
+      });
+
+      closer.onclick = () => {
+        overlay.setPosition(undefined);
+        closer.blur();
+        return false;
+      };
+
       const map = new OlMap({
         target: mapRef.current,
         layers: [new TileLayer({ source: new OSM() })],
@@ -26,6 +47,73 @@ function Map({
           center: fromLonLat([coords.longitude, coords.latitude]),
           zoom: 12,
         }),
+        overlays: [overlay],
+      });
+
+      const getData = useFuelStationApi(coords);
+
+      getData().then((stations) => {
+        setStations(stations);
+
+        const promises = Object.keys(stations.elements).map((key) => {
+          const _Data = stations.elements[key];
+          const feature = new Feature({
+            geometry: new Point(
+              fromLonLat([parseFloat(_Data.lon), parseFloat(_Data.lat)])
+            ),
+            category: "E-Fuel Station",
+            title: _Data.tags?.operator,
+            description: _Data.lat + ", " + _Data.lon,
+          });
+          return Promise.resolve(feature);
+        });
+
+        Promise.all(promises)
+          .then((resolvedFeatures) => {
+            setFeatures(resolvedFeatures);
+            const markers = new VectorLayer({
+              source: new VectorSource({
+                features: resolvedFeatures,
+              }),
+              style: new Style({
+                image: new Icon({
+                  anchor: [0.5, 1],
+                  src: "https://docs.maptiler.com/openlayers/default-marker/marker-icon.png",
+                }),
+              }),
+            });
+
+            map.addLayer(markers);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
+
+      map.on("click", (evt) => {
+        const feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => {
+          return feature;
+        });
+        if (feature) {
+          const coordinates = feature.getGeometry().getCoordinates();
+          const operator = feature.get("title");
+          const latLon = feature.get("description").split(",");
+          console.log(latLon);
+          content.innerHTML = `
+          <div class="modal-content">
+            <span>${operator ? operator : "Operator is unkown"}</span><br>
+            <span>${latLon}</span><br />
+            <span>${calcDistance(
+              latLon[0],
+              latLon[1],
+              coords.latitude,
+              coords.longitude
+            )} km distance</span>
+          </div>
+          `;
+          overlay.setPosition(coordinates);
+          container.style.display = "block";
+        }
       });
 
       map.on("postcompose", (_e) => {
@@ -36,19 +124,6 @@ function Map({
 
       const userPosition = new Marker(coords);
       map.addLayer(userPosition.getMarker());
-
-      const getData = useFuelStationApi(coords);
-
-      getData().then((stations) => {
-        setStations(stations);
-        stations.elements.forEach((station) => {
-          const stationPosition = new Marker({
-            latitude: station.lat,
-            longitude: station.lon,
-          });
-          map.addLayer(stationPosition.getMarker());
-        });
-      });
 
       return map.setTarget(mapRef.current);
     }
@@ -61,6 +136,8 @@ function Map({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
       };
+
+      setCoords(coords);
 
       return callback(coords);
     });
@@ -85,6 +162,10 @@ function Map({
 
   return (
     <div className="view active-view" id="map" ref={mapRef}>
+      <div id="popup" className="ol-popup modal">
+        <a href="#" id="popup-closer" className="ol-popup-closer"></a>
+        <div id="popup-content"></div>
+      </div>
       {isLoading ? (
         <div
           className="ripples"

@@ -1,28 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useTheme from "../hooks/useTheme";
+import useDistanceCalc from "../hooks/useDistanceCalc";
 
-function FuelStationCard(station) {
+function FuelStationCard({ station, coords }) {
   const [isDark, _switchTheme] = useTheme();
+  const calcDistance = useDistanceCalc();
+  const [distance, setDistance] = useState();
 
-  const removeFromFav = (favStations) => {
-    const index = favStations.indexOf(station.id);
-    if (index > -1) {
-      favStations.splice(index, 1);  
-    }
-    localStorage.setItem("favStations", favStations);
+  useEffect(() => {
+    setDistance(
+      (prevState) =>
+        (prevState = calcDistance(
+          station.lat,
+          station.lon,
+          coords.latitude,
+          coords.longitude
+        ))
+    );
+  }, []);
+
+  const addToFav = () => {
+    const favStations = localStorage.getItem("favStations");
+    const favStationsArray = favStations ? JSON.parse(favStations) : [];
+    const updatedStations = [...favStationsArray, station.id];
+    localStorage.setItem("favStations", JSON.stringify(updatedStations));
   };
 
-  const addToFav = (favStations) => {
-    favStations.push(station.id);
-    localStorage.setItem("favStations", favStations);
+  const removeFromFav = () => {
+    const favStations = localStorage.getItem("favStations");
+    const favStationsArray = favStations ? JSON.parse(favStations) : [];
+    const updatedStations = favStationsArray.filter(
+      (item) => item !== station.id
+    );
+    localStorage.setItem("favStations", JSON.stringify(updatedStations));
   };
 
-  const handleClick = (_event) => {
+  const handleClick = (event) => {
     const favStations = localStorage.getItem("favStations") || [];
     if (favStations.includes(station.id)) {
       removeFromFav(favStations);
+      event.target.src = "/icons/heart-outline.svg";
     } else {
       addToFav(favStations);
+      event.target.src = "/icons/heart.svg";
     }
   };
 
@@ -40,14 +60,19 @@ function FuelStationCard(station) {
           onClick={handleClick}
           className="card-fav-btn"
           src={
-            localStorage.getItem("favStations").includes(station.id)
+            (localStorage.getItem("favStations") || []).includes(
+              station.id
+            )
               ? "/icons/heart.svg"
               : "/icons/heart-outline.svg"
           }
           alt="Favourite Button"
         />
-        <h1 style={{ fontWeight: "300" }}>{station.station.tags?.operator}</h1>
+        <span>{distance} km</span>
         <div>
+          <span style={{ fontWeight: "300" }}>
+            {station.tags?.operator}
+          </span>
           <img src="/icons/car.png" alt="Car" />
         </div>
       </div>

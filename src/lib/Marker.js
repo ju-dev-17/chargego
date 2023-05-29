@@ -21,7 +21,7 @@ export default class Marker {
         image: new Icon({
           anchor: [0.5, 1],
           crossOrigin: "anonymous",
-          src: "https://docs.maptiler.com/openlayers/default-marker/marker-icon.png",
+          src: "https://ucarecdn.com/4b516de9-d43d-4b75-9f0f-ab0916bd85eb/marker.png",
         }),
       }),
     });
