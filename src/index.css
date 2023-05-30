@@ -39,6 +39,16 @@ img {
   padding: 0px;
 }
 
+#payments {
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}
+
+#payments img {
+  cursor: pointer;
+}
+
 #stations {
   flex-direction: column;
   gap: 20px;
@@ -51,6 +61,27 @@ img {
   gap: 20px;
   overflow-y: scroll;
   padding: 0px 10px 0 10px;
+}
+
+#settings {
+  display: flex;
+  flex-direction: column;
+}
+
+#settings div {
+  padding: 25px;
+  font-weight: 600;
+  background-color: #66cdaa;
+  color: #fff;
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background-color 0.3s;
+}
+
+#settings div:active {
+  background-color: #00185c;
 }
 
 .view {

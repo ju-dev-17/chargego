@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 function BottomNav({ isLoading, isDark }) {
   const navigate = useNavigate();
+
+  const isiPhone = () => {
+    return /iPhone/i.test(navigator.userAgent);
+  }
+  
+  useEffect(() => {
+    const nav = document.querySelector("nav");
+    if (isiPhone()) {
+      nav.style.height = "20vh";
+    } else {
+      nav.style.height = "10vh";
+    }
+  }, []);
 
   const handleBtnHover = (event) => {
     const btn = event.target;

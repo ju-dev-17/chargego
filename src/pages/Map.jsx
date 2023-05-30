@@ -14,7 +14,14 @@ import Marker from "../lib/Marker";
 import useFuelStationApi from "../hooks/useFuelStationApi";
 import useDistanceCalc from "../hooks/useDistanceCalc";
 
-function Map({ isLoading, setIsLoading, isDark, switchTheme, setStations, setCoords }) {
+function Map({
+  isLoading,
+  setIsLoading,
+  isDark,
+  switchTheme,
+  setStations,
+  setCoords,
+}) {
   const mapRef = useRef(null);
   const [features, setFeatures] = useState([]);
   const calcDistance = useDistanceCalc();
@@ -175,9 +182,7 @@ function Map({ isLoading, setIsLoading, isDark, switchTheme, setStations, setCoo
         </div>
       ) : (
         <img
-          onClick={() => {
-            switchTheme();
-          }}
+          onClick={switchTheme}
           src={isDark === "true" ? "/icons/sun.svg" : "/icons/moon.svg"}
           alt="Switch theme"
           id="switch-theme-btn"

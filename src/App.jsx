@@ -39,7 +39,7 @@ function App() {
           }
         />
         <Route path="/payment" element={<Payment />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/settings" element={<Settings isDark={isDark} switchTheme={switchTheme} />} />
       </Routes>
       <BottomNav isLoading={isLoading} isDark={isDark} />
     </Router>
