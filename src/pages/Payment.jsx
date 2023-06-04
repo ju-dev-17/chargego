@@ -21,8 +21,8 @@ function Payment() {
               alignItems: "center",
               flexDirection: "column",
               marginTop: 50,
-              paddingLeft:  25,
-              paddingRight: 25
+              paddingLeft: 25,
+              paddingRight: 25,
             }}
           >
             <img
