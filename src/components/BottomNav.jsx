@@ -5,17 +5,14 @@ import { useNavigate } from "react-router-dom";
 function BottomNav({ isLoading, isDark }) {
   const navigate = useNavigate();
 
-  const isiPhone = () => {
-    return /iPhone/i.test(navigator.userAgent);
-  }
-  
+  const isAndroid = navigator.userAgent.indexOf("Android") !== -1;
+
   useEffect(() => {
-    const nav = document.querySelector("nav");
-    if (isiPhone()) {
-      nav.style.height = "20vh";
-    } else {
-      nav.style.height = "10vh";
-    }
+    // if (isAndroid) {
+    //   for (let navBtn of document.querySelectorAll(".nav-btn")) {
+    //     navBtn.style.marginBottom = 100;
+    //   }
+    // }
   }, []);
 
   const handleBtnHover = (event) => {
@@ -44,7 +41,7 @@ function BottomNav({ isLoading, isDark }) {
 
   return (
     <nav style={{ backgroundColor: isDark === "true" ? "#000437" : "#66cdaa" }}>
-      <div>
+      <div style={{ marginBottom: isAndroid ? 90 : 45 }}>
         <div>
           <img
             id="list-btn"
@@ -57,7 +54,7 @@ function BottomNav({ isLoading, isDark }) {
           />
         </div>
       </div>
-      <div>
+      <div style={{ marginBottom: isAndroid ? 90 : 45 }}>
         <div>
           <img
             id="fav-btn"
@@ -78,8 +75,9 @@ function BottomNav({ isLoading, isDark }) {
         onMouseEnter={handleBtnHover}
         onMouseLeave={handleBtnHover}
         onClick={() => handeBtnClick("/")}
+        style={{ marginBottom: isAndroid ? 100 : 55 }}
       />
-      <div>
+      <div style={{ marginBottom: isAndroid ? 90 : 45 }}>
         <div>
           <img
             id="card-btn"
@@ -92,7 +90,7 @@ function BottomNav({ isLoading, isDark }) {
           />
         </div>
       </div>
-      <div>
+      <div style={{ marginBottom: isAndroid ? 90 : 45 }}>
         <div>
           <img
             id="settings-btn"

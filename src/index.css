@@ -162,7 +162,7 @@ nav {
   background-color: #66cdaa;
   color: white;
   font-weight: 600;
-  height: 10vh;
+  height: 20vh;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -203,32 +203,9 @@ nav {
   transition: step-end 0.2s;
 }
 
-.nav-btn-circle-inner-active {
-  border-radius: 50%;
-  background-color: #4390dd;
-  width: 52px;
-  height: 52px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: ease-in-out 0.2s;
-}
-
-.nav-btn-circle-outer-active {
-  border-radius: 50%;
-  background-color: #bfebff;
-  width: 54px;
-  height: 54px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: step-end 0.2s;
-}
-
 #map-btn {
   width: 100px;
   height: auto;
-  margin-bottom: 10px;
 }
 
 #map-btn:hover {
@@ -295,6 +272,7 @@ nav {
   height: 140px;
   position: relative;
 }
+
 .loader-circle-43:before,
 .loader-circle-43:after {
   content: "";
@@ -307,13 +285,16 @@ nav {
   border-radius: 100px;
   opacity: 0;
 }
+
 .loader-circle-43:before {
   transform: scale(1);
   animation: loader-circle-43-pulse 2s infinite linear;
 }
+
 .loader-circle-43:after {
   animation: loader-circle-43-pulse 2s 1s infinite linear;
 }
+
 @keyframes loader-circle-43-pulse {
   0% {
     transform: scale(0.6);
