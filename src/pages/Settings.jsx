@@ -15,11 +15,6 @@ function Settings({ isDark, switchTheme }) {
           style={{ backgroundColor: isDark === "true" ? "#000437" : "#66cdaa" }}
         />
       </div>
-      <div
-        style={{ backgroundColor: isDark === "true" ? "#000437" : "#66cdaa" }}
-      >
-        <span>Location Permission</span>
-      </div>
     </div>
   );
 }

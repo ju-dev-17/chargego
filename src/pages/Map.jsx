@@ -23,7 +23,7 @@ function Map({
   setCoords,
 }) {
   const mapRef = useRef(null);
-  const [features, setFeatures] = useState([]);
+  const [_features, setFeatures] = useState([]);
   const calcDistance = useDistanceCalc();
 
   const setupMap = (coords) => {
@@ -138,16 +138,17 @@ function Map({
 
   const updateCoordinate = (callback) => {
     setIsLoading((prevState) => (prevState = true));
-    navigator.geolocation.getCurrentPosition((position) => {
-      const coords = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-
-      setCoords(coords);
-
-      return callback(coords);
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const coords = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        setCoords(coords);
+        return callback(coords);
+      },
+      (error) => console.log("Geolocation error:", error.message)
+    );
   };
 
   useEffect(() => {

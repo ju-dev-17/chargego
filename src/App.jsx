@@ -22,8 +22,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/stations" element={<Stations coords={coords} stations={stations} />} />
-        <Route path="/favourite-stations" element={<FavouriteStations coords={coords} stations={stations} />} />
+        <Route
+          path="/stations"
+          element={<Stations coords={coords} stations={stations} />}
+        />
+        <Route
+          path="/favourite-stations"
+          element={<FavouriteStations coords={coords} stations={stations} />}
+        />
         <Route
           index
           path="/"
@@ -39,7 +45,15 @@ function App() {
           }
         />
         <Route path="/payment" element={<Payment />} />
-        <Route path="/settings" element={<Settings isDark={isDark} switchTheme={switchTheme} />} />
+        <Route
+          path="/settings"
+          element={
+            <Settings
+              isDark={isDark}
+              switchTheme={switchTheme}
+            />
+          }
+        />
       </Routes>
       <BottomNav isLoading={isLoading} isDark={isDark} />
     </Router>

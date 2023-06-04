@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function Payment() {
   const [visibility, setVisibility] = useState(false);
@@ -9,6 +9,25 @@ function Payment() {
     setCurrentMethod(paymentMethod);
     setVisibility(!visibility);
   };
+
+  useEffect(() => {
+    const checkedTimeout = setTimeout(() => {
+      const loader = document.querySelector(".loader-circle-43");
+      loader.classList.remove("loader-circle-43");
+
+      const checkedImg = document.createElement("img");
+      checkedImg.src = "/icons/checkmark-circle.svg";
+      checkedImg.width = 140;
+      checkedImg.height = 140;
+
+      loader.appendChild(checkedImg);
+
+      const statusMessage = document.querySelector("#status-message");
+      statusMessage.textContent = "Payment successful";
+    }, 10000);
+
+    return () => clearTimeout(checkedTimeout);
+  }, []);
 
   return (
     <>
@@ -42,6 +61,7 @@ function Payment() {
               }}
             >
               <h2
+                id="status-message"
                 style={{
                   textAlign: "center",
                   fontWeight: 600,
