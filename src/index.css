@@ -98,14 +98,16 @@ img {
   overflow: auto;
   background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 10%;
 }
 
 .modal-content {
   color: #fff;
   margin: 15% auto;
-  padding: 20px;
+  padding: 10px;
   border: 1px solid #888;
-  width: 300px;
+  width: 125px;
+  text-align: center;
 }
 
 .card {

@@ -5,14 +5,15 @@ import Overlay from "ol/Overlay.js";
 import { fromLonLat } from "ol/proj";
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
-import { Point } from "ol/geom";
+import { Point, LineString } from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
-import { Style, Icon } from "ol/style";
+import { Style, Icon, Stroke } from "ol/style";
 
 import Marker from "../lib/Marker";
 import useFuelStationApi from "../hooks/useFuelStationApi";
 import useDistanceCalc from "../hooks/useDistanceCalc";
+import useRandomPrices from "../hooks/useRandomPrices";
 
 function Map({
   isLoading,
@@ -25,6 +26,21 @@ function Map({
   const mapRef = useRef(null);
   const [_features, setFeatures] = useState([]);
   const calcDistance = useDistanceCalc();
+  const generatePrices = useRandomPrices();
+
+  const compareArrays = (arr1, arr2) => {
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   const setupMap = (coords) => {
     if (mapRef.current) {
@@ -97,6 +113,20 @@ function Map({
           });
       });
 
+      const vectorSource = new VectorSource();
+
+      const vectorLayer = new VectorLayer({
+        source: vectorSource,
+        style: new Style({
+          stroke: new Stroke({
+            color: "red",
+            width: 3,
+          }),
+        }),
+      });
+
+      map.addLayer(vectorLayer);
+
       map.on("click", (evt) => {
         const feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => {
           return feature;
@@ -104,12 +134,12 @@ function Map({
         if (feature) {
           const coordinates = feature.getGeometry().getCoordinates();
           const operator = feature.get("title");
-          const latLon = feature.get("description").split(",");
-          console.log(latLon);
+          const latLon = feature.get("description").split(", ");
+
           content.innerHTML = `
           <div class="modal-content">
             <span>${operator ? operator : "Operator is unkown"}</span><br>
-            <span>${latLon}</span><br />
+            <span>${generatePrices(0.35, 0.42)}€</span><br />
             <span>${calcDistance(
               latLon[0],
               latLon[1],

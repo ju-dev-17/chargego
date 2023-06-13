@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import useTheme from "../hooks/useTheme";
 import useDistanceCalc from "../hooks/useDistanceCalc";
+import useRandomPrices from "../hooks/useRandomPrices";
 
 function FuelStationCard({ station, coords }) {
   const [isDark, _switchTheme] = useTheme();
   const calcDistance = useDistanceCalc();
   const [distance, setDistance] = useState();
+  const generatePrices = useRandomPrices();
 
   useEffect(() => {
     setDistance(
@@ -60,9 +62,7 @@ function FuelStationCard({ station, coords }) {
           onClick={handleClick}
           className="card-fav-btn"
           src={
-            (localStorage.getItem("favStations") || []).includes(
-              station.id
-            )
+            (localStorage.getItem("favStations") || []).includes(station.id)
               ? "/icons/heart.svg"
               : "/icons/heart-outline.svg"
           }
@@ -70,10 +70,8 @@ function FuelStationCard({ station, coords }) {
         />
         <span>{distance} km</span>
         <div>
-          <span style={{ fontWeight: "300" }}>
-            {station.tags?.operator}
-          </span>
-          <img src="/icons/car.png" alt="Car" />
+          <span style={{ fontWeight: "300" }}>{station.tags?.operator}</span>
+          <span>{generatePrices(0.35, 0.42)}€</span>
         </div>
       </div>
     </div>

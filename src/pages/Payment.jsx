@@ -24,7 +24,7 @@ function Payment() {
 
       const statusMessage = document.querySelector("#status-message");
       statusMessage.textContent = "Payment successful";
-    }, 10000);
+    }, 5000);
 
     return () => clearTimeout(checkedTimeout);
   }, []);
